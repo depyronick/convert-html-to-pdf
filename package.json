@@ -54,7 +54,7 @@
   },
   "dependencies": {
     "lodash": "^4.17.15",
-    "puppeteer": "^1.19.0"
+    "puppeteer": "22.7.1"
   },
   "jest": {
     "clearMocks": true,
