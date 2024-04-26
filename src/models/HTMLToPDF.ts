@@ -1,20 +1,20 @@
-import isArray from 'lodash/fp/isArray';
-import mergeWith from 'lodash/fp/mergeWith';
-import puppeteer from 'puppeteer';
-import { HTMLToPDFOptions } from '../types';
+import isArray from "lodash/fp/isArray";
+import mergeWith from "lodash/fp/mergeWith";
+import puppeteer from "puppeteer";
+import { HTMLToPDFOptions } from "../types";
 
 export default class HTMLToPDF {
   private _html: string;
 
   private _options: HTMLToPDFOptions = {
     browserOptions: {
-      args: ['--font-render-hinting=none'],
+      args: ["--font-render-hinting=none"],
     },
     pdfOptions: {
       printBackground: true,
     },
     waitForNetworkIdle: false,
-    delayRenderInMs: 0
+    delayRenderInMs: 0,
   };
 
   constructor(html: string, options?: HTMLToPDFOptions) {
@@ -37,26 +37,29 @@ export default class HTMLToPDF {
       const browser = await puppeteer.launch(this._options.browserOptions);
       const page = await browser.newPage();
 
-      page.on('error', async (err) => {
+      page.on("error", async (err) => {
         await browser.close();
         rej(err);
       });
 
       if (this._options.waitForNetworkIdle) {
-        const html = HTMLToPDF.createDataUri(this._html, 'text/html');
-        await page.goto(html, { waitUntil: 'networkidle0' });
+        const html = HTMLToPDF.createDataUri(this._html, "text/html");
+        await page.goto(html, { waitUntil: "networkidle0" });
       } else {
         await page.setContent(this._html);
       }
 
       try {
-        const pdf = await new Promise(async (resolve, reject) => {
-            setTimeout(async () => resolve(await page.pdf(this._options.pdfOptions)), this._options.delayRenderInMs);
+        const pdf = await new Promise<any>(async (resolve, reject) => {
+          setTimeout(
+            async () => resolve(await page.pdf(this._options.pdfOptions)),
+            this._options.delayRenderInMs
+          );
         });
-        
+
         await browser.close();
         res(pdf);
-      } catch (err) {
+      } catch (err: any) {
         await browser.close();
         rej(new Error(`Error whilst generating PDF: ${err.message}`));
       }
@@ -65,14 +68,14 @@ export default class HTMLToPDF {
 
   public static createDataUri = (data: Buffer | string, mimeType: string) => {
     const asBuffer = data instanceof Buffer ? data : Buffer.from(data);
-    const asBase64 = asBuffer.toString('base64');
+    const asBase64 = asBuffer.toString("base64");
     return `data:${mimeType};base64,${asBase64}`;
   };
 
   private mergeOptions = mergeWith((objValue, srcValue) => {
     if (isArray(objValue)) {
       if (srcValue.length === 0) {
-        return objValue = srcValue;
+        return (objValue = srcValue);
       }
       return objValue.concat(srcValue);
     }

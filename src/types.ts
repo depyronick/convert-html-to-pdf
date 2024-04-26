@@ -1,3 +1,5 @@
+import { PuppeteerLaunchOptions } from "puppeteer";
+
 /**
  * Configuration for the express-html-to-pdf middleware.
  */
@@ -6,7 +8,7 @@ export interface HTMLToPDFOptions {
    * The Puppeteer launch options configuration.
    * @default { args: ['--font-render-hinting=none'] }
    */
-  browserOptions?: LaunchOptions;
+  browserOptions?: PuppeteerLaunchOptions;
   /**
    * The Puppeteer PDF options configuration.
    * @default { printBackground: true }
@@ -20,10 +22,10 @@ export interface HTMLToPDFOptions {
    * @default false
    */
   waitForNetworkIdle?: boolean;
-  
+
   /**
-  * Delays render
-  */
+   * Delays render
+   */
   delayRenderInMs?: number;
 }
 
@@ -36,16 +38,16 @@ export type LayoutDimension = string | number;
  * Pre-defined PDF formats.
  */
 export type PDFFormat =
-  'Letter'
-  | 'Legal'
-  | 'Tabloid'
-  | 'Ledger'
-  | 'A0'
-  | 'A1'
-  | 'A2'
-  | 'A3'
-  | 'A4'
-  | 'A5';
+  | "Letter"
+  | "Legal"
+  | "Tabloid"
+  | "Ledger"
+  | "A0"
+  | "A1"
+  | "A2"
+  | "A3"
+  | "A4"
+  | "A5";
 
 /**
  * The Puppeteer PDF options configuration.
